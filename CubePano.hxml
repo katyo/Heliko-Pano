@@ -1,0 +1,8 @@
+# CubePano
+-swf CubePano.swf
+-swf-version 9
+-main CubePano
+#-lib pv3d_haxe
+-swf-lib library.swf
+-cp ./hxclasses
+--no-traces
