@@ -109,7 +109,7 @@
     },
     mousewheel:function(e, d){
       var self = $(this), cont = self.parent();
-      cont.trigger('pano.zoom', d > 0 ? -10 : 10);
+      cont.trigger('pano.zoom', [d > 0 ? -10 : 10]);
       e.preventDefault();
     },
     dragstart: dummy,
@@ -234,8 +234,7 @@
 	if(abs){
 	  p.fov = fov;
 	}else{
-          if(abs)
-	  p.fov += fov;
+          p.fov += fov;
 	}
 	p.fov = Math.max(Math.min(p.fov, r[1]), r[0]);
 	self.trigger('pano.draw');
