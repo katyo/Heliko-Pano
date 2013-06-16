@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+  <head>
+    <script>var global = window;</script>
+    <script src="../src/mat4.js"></script>
+  </head>
+  <body>
+    <script>
+var m_r = mat4(),
+    m_s = mat4(),
+    m_f = mat4();
+
+function prog(){
+  mat4_rotate(m_r, 0.98, 0.44, 0.2, 2.1);
+  mat4_scale(m_s, 0.54, 0.28, 0.99);
+  mat4_mul(m_f, m_r, m_s);
+}
+
+function bench(t, f, n){
+  f();
+  document.writeln(t + ' result: ' + mat4_stringify_css(m_f));
+  var _ = new Date();
+  for(var $ = 0; $ < n; $++) f();
+  document.writeln(t + ' mean time: ' + ((new Date() - _) * 1000 / n) + ' us' + '<br/>');
+}
+
+function test(type){
+  arrayType = global[type];
+  bench(type, prog, 1000000);
+}
+
+var type = location.hash.slice(1),
+    types = {Array:0, Float32Array:0, Float64Array:0};
+
+if(type){
+  test(type);
+}else{
+  for(type in types){
+    document.writeln('<a href="#'+type+'" target="_blank">'+type+'</a><br/>');
+  }
+}
+
+//test('Array');
+//test('Float32Array');
+//test('Float64Array');
+    </script>
+  </body>
+</html>
