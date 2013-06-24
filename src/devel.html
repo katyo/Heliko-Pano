@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+  <head>
+    <script>
+      var NAME = 'heliko_pano',
+          DEBUG = true;
+    </script>
+    <script src="engine.js"></script>
+    <script src="mat4.js"></script>
+    <script src="webgl.js"></script>
+    <script src="css3d.js"></script>
+    <script src="jquery.js"></script>
+    <script src="jquery.mousewheel.js"></script>
+    <script src="ui.jquery.js"></script>
+    <style>
+      #pano {
+      position:relative;
+      margin:50px;
+      width:1024px;
+      height:500px
+      }
+      #pano > * {
+      border: solid 1px black;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="pano"></div>
+    <script>
+      $('#pano').heliko_pano({
+        render: location.hash.replace('#', '') || '*',
+        images: [
+          '../render/1.jpg',
+          '../render/2.jpg',
+          '../render/3.jpg',
+          '../render/4.jpg',
+          '../render/5.jpg',
+          '../render/6.jpg',
+        ],
+        mouse: {
+          dragx: -1,
+          dragy: -1
+        }
+      });
+    </script>
+  </body>
+</html>
