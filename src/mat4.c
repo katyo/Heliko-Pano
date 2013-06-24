@@ -100,23 +100,23 @@ void mat4_rotate(mat4_t m, scal_t x, scal_t y, scal_t z, scal_t a){
            0.0,                   0.0,                   0.0,                   1.0);
 }
 
-void mat4_perspective(mat4_t m, scal_t d){
+void mat4_frustum(mat4_t m, scal_t x, scal_t X, scal_t y, scal_t Y, scal_t z, scal_t Z){
+  mat4_set(m,
+           2.0 * z / (X - x), 0.0,               (X + x) / (X - x),   0.0,
+           0.0,               2.0 * z / (Y - y), (Y + y) / (Y - y),   0.0,
+           0.0,               0.0,              -(Z + z) / (Z - z), -2.0 * Z * z / (Z - z),
+           0.0,               0.0,              -1.0,                 0.0);
+}
+
+void mat4_perspective(mat4_t m, scal_t fov, scal_t aspect, scal_t znear, scal_t zfar){
+  fov = znear * tan(0.5 * fov);
+  mat4_frustum(m, -fov * aspect, fov * aspect, -fov, fov, znear, zfar);
+}
+
+void mat4_perspective_d(mat4_t m, scal_t d){
   mat4_set(m,
            1.0, 0.0, 0.0, 0.0,
            0.0, 1.0, 0.0, 0.0,
            0.0, 0.0, 1.0, 0.0,
            0.0, 0.0, -1.0/d, 1.0);
-}
-
-void mat4_perspective4(mat4_t m, scal_t fov, scal_t aspect, scal_t znear, scal_t zfar){
-  scal_t f = 1.0 / tan(0.5 * fov);
-  mat4_set(m,
-           f / aspect, 0.0, 0.0,                             0.0,
-           0.0,        f,   0.0,                             0.0,
-           0.0,        0.0, (zfar + znear) / (zfar - znear), 2.0 * zfar * znear / (zfar - znear),
-           0.0,        0.0, -1.0,                            0.0);
-}
-
-void mat4_perspective_fov(mat4_t m, scal_t fov){
-  mat4_perspective4(m, fov, 1.0, 0.0001, 1000.0);
 }

@@ -3,6 +3,8 @@ var MT = global.Math,
     max = MT.max,
     pi = MT.PI,
     h_pi = 0.5 * pi,
+    rad2deg = 180.0 / pi,
+    deg2rad = pi / 180.0,
     sin = MT.sin,
     cos = MT.cos,
     tan = MT.tan,
@@ -109,7 +111,22 @@ function mat4_rotate(m, x, y, z, a){
   );
 }
 
-function mat4_perspective(m, d){
+function mat4_frustum(m, x, X, y, Y, z, Z){
+  mat4_set(
+    m,
+    2.0 * z / (X - x), 0.0,               (X + x) / (X - x),   0.0,
+    0.0,               2.0 * z / (Y - y), (Y + y) / (Y - y),   0.0,
+    0.0,               0.0,              -(Z + z) / (Z - z), -2.0 * Z * z / (Z - z),
+    0.0,               0.0,              -1.0,                 0.0
+  );
+}
+
+function mat4_perspective(m, fov, aspect, znear, zfar){
+  fov = znear * tan(0.5 * fov);
+  mat4_frustum(m, -fov * aspect, fov * aspect, -fov, fov, znear, zfar);
+}
+
+function mat4_perspective_d(m, d){
   mat4_set(
     m,
     1.0, 0.0, 0.0, 0.0,
@@ -117,21 +134,6 @@ function mat4_perspective(m, d){
     0.0, 0.0, 1.0, 0.0,
     0.0, 0.0, -1.0/d, 1.0
   );
-}
-
-function mat4_perspective4(m, fov, aspect, znear, zfar){
-  var f = 1.0 / tan(0.5 * fov);
-  mat4_set(
-    m,
-    f / aspect, 0.0, 0.0,                             0.0,
-    0.0,        f,   0.0,                             0.0,
-    0.0,        0.0, (zfar + znear) / (zfar - znear), 2.0 * zfar * znear / (zfar - znear),
-    0.0,        0.0, -1.0,                            0.0
-  );
-}
-
-function mat4_perspective_fov(m, fov){
-  mat4_perspective4(m, fov, 1.0, 0.0001, 1000.0);
 }
 
 function mat4_parse(m, s){
