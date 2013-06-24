@@ -24,3 +24,13 @@ clean: $(target.clean)
 
 testswf: build
 	@testswf CubePano.swf
+
+debug.render: debug.svg
+	mkdir -p $@
+	for i in `seq 6`; do inkscape -i layer$$i -j -C -e $@/$$i.jpg $<; done
+
+server:
+	@/usr/sbin/nginx -p . -c ./nginx.conf
+	@echo 'Run browsers and navigate to http://localhost:8042/src/devel.html'
+	@echo 'Press any key for complete...'
+	@read r; kill `cat ./nginx.pid`
