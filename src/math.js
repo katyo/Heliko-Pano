@@ -55,5 +55,12 @@ Matrix3D.prototype = {
     var m = mat4();
     mat4_perspective(m, fov, aspect, znear, zfar);
     return this.m(m);
+  },
+  v: function(x, y, z, w){
+    var r = vec4(),
+        v = vec4();
+    vec4_set(v, x, y, z, w);
+    mat4_mul_vec4(r, this.$, v);
+    return r;
   }
 };
