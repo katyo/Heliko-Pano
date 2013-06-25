@@ -67,8 +67,6 @@ HelikoPanoCube.engine(
 
       self.active = true;
       self.init();
-
-      return self;
     }
 
     function Shader(gl, gp, type, src){
@@ -184,8 +182,6 @@ gl_FragColor=texture2D(t,c);\
           }
         }
 
-        console.log('init');
-
         self.init_textures();
       },
       init_textures: function(){
@@ -198,8 +194,6 @@ gl_FragColor=texture2D(t,c);\
         for(i = 0; i < 6; i++){
           textures[i] = images[i] ? Texture(gl, images[i]) : null;
         }
-
-        console.log('init_textures');
       },
       draw: function(){
         if(!this.active){
@@ -247,8 +241,6 @@ gl_FragColor=texture2D(t,c);\
           gl.bindTexture(gl.TEXTURE_2D, textures[i]);
           gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
         }
-
-        //console.log('draw');
       },
       load: function(urls, cb, pc){
         var i,
