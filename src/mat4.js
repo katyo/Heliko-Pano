@@ -1,14 +1,3 @@
-var MT = global.Math,
-    min = MT.min,
-    max = MT.max,
-    pi = MT.PI,
-    h_pi = 0.5 * pi,
-    rad2deg = 180.0 / pi,
-    deg2rad = pi / 180.0,
-    sin = MT.sin,
-    cos = MT.cos,
-    tan = MT.tan,
-    arrayType = Float32Array;
 
 function mat4(){
   return new arrayType(16);
