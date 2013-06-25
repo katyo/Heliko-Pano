@@ -31,6 +31,7 @@ HelikoPanoCube.engine(
 
       self.p = mat4(); /* projection matrix */
       self.r = mat4(); /* static temporary matrix */
+      self.l = mat4();
     }
 
     CSS3D.prototype = {
@@ -70,26 +71,26 @@ HelikoPanoCube.engine(
       draw: function(){
         var i,
             self = this,
-            view = self.view,
+            view = self.v,
             proj = self.p,
             temp = self.r,
+            pmat = self.l,
             mplane = self.m,
-            planes = view.children;
+            planes = self.view.children;
+
+        mat4_mul(temp, proj, view);
 
         for(i = 0; i < planes.length; i++){
-          mat4_mul(temp, mplane[i], proj);
-          mat4_mul(temp, temp, self.v);
-          planes[i].style[transform.sty] = mat4_stringify_css(temp);
-          //planes[i].getAttribute('style').replace(css_transform + ':');
+          mat4_mul(pmat, mplane[i], temp);
+          planes[i].style[transform.sty] = mat4_stringify_css(pmat);
         }
       },
       size: function(width, height){
         var self = this,
             view = self.view,
             temp = self.r,
-            scale = self.port = max(width, height),
-            h_scale = 0.5 * scale,
-            q_scale = 0.5 * h_scale;
+            scale = max(width, height),
+            h_scale = 0.5 * scale;
 
         mat4_scale(self.v, h_scale, -h_scale, h_scale); /* invert Y */
         mat4_translate(temp, -h_scale - 0.5 * (scale - width), -h_scale - 0.5 * (scale - height), -scale);
