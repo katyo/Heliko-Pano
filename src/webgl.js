@@ -24,7 +24,11 @@ HelikoPanoCube.engine(
     return false;
   },
   function(){
-    var ctx_name = this.ctx_name;
+    var ctx_name = this.ctx_name,
+        vendors = {
+          MOZ: 0,
+          WEBKIT: 0
+        };
 
     function WEBGL(geom){
       var self = this,
@@ -82,6 +86,20 @@ HelikoPanoCube.engine(
       gl.attachShader(gp, s);
     }
 
+    function Extension(gl, name){
+      var ext = null;
+
+      if(!(ext = gl.getExtension(name))){
+        for(var pfx in vendors){
+          if((ext = gl.getExtension(pfx + '_' + name))){
+            break;
+          }
+        }
+      }
+
+      return ext;
+    }
+
     function Texture(gl, im){
       var tex = gl.createTexture();
 
@@ -90,11 +108,17 @@ HelikoPanoCube.engine(
 
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, im);
 
-      /* use mipmapping to better rendering */
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-      //gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_NEAREST);
+      /* use mipmapping with trilinear filtering to better rendering */
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
       gl.generateMipmap(gl.TEXTURE_2D);
+
+      /* use anizotropic filtering extension when available */
+      var tfa = Extension(gl, 'EXT_texture_filter_anisotropic');
+      if(tfa){
+        var max = gl.getParameter(tfa.MAX_TEXTURE_MAX_ANISOTROPY_EXT);
+        gl.texParameterf(gl.TEXTURE_2D, tfa.TEXTURE_MAX_ANISOTROPY_EXT, max);
+      }
 
       /* setup wrapping to eliminate white glitches between faces */
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
