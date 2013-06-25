@@ -183,6 +183,7 @@ gl_FragColor=texture2D(t,c);\
         }
 
         self.init_textures();
+        self.init_viewport();
       },
       init_textures: function(){
         var i,
@@ -194,6 +195,17 @@ gl_FragColor=texture2D(t,c);\
         for(i = 0; i < 6; i++){
           textures[i] = images[i] ? Texture(gl, images[i]) : null;
         }
+      },
+      init_viewport: function(){
+        var gl = this.ctx,
+            size = max(gl.drawingBufferWidth, gl.drawingBufferHeight);
+
+        gl.viewport(
+          0.5 * (gl.drawingBufferWidth - size),
+          0.5 * (gl.drawingBufferHeight - size),
+          size,
+          size
+        );
       },
       draw: function(){
         if(!this.active){
@@ -207,13 +219,6 @@ gl_FragColor=texture2D(t,c);\
             vertexes = self.v,
             planes = self.geom,
             program = self.g;
-
-        gl.viewport(
-          0.5 * (gl.drawingBufferWidth - self.port),
-          0.5 * (gl.drawingBufferHeight - self.port),
-          self.port,
-          self.port
-        );
 
         if(DEBUG){
           gl.clear(gl.COLOR_BUFFER_BIT);
@@ -265,11 +270,10 @@ gl_FragColor=texture2D(t,c);\
         var self = this,
             view = self.view;
 
-        self.port = max(width, height);
-
         view.width = width;
         view.height = height;
-
+        
+        self.init_viewport();
         self.draw();
       },
       look: function(latitude, longitude, viewangle){
