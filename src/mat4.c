@@ -37,7 +37,7 @@ void mat4_identity(mat4_t m){
            0.0, 0.0, 0.0, 1.0);
 }
 
-void mat4_mul(mat4_t m, mat4_t a, mat4_t b){
+void mat4_mul(mat4_t m, mat4_t b, mat4_t a){
   mat4_set(m,
            a[ 0] * b[ 0] + a[ 1] * b[ 4] + a[ 2] * b[ 8] + a[ 3] * b[12],
            a[ 4] * b[ 0] + a[ 5] * b[ 4] + a[ 6] * b[ 8] + a[ 7] * b[12],

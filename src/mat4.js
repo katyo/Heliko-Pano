@@ -30,7 +30,7 @@ function mat4_identity(m){
   );
 }
 
-function mat4_mul(m, a, b){
+function mat4_mul(m, b, a){
   mat4_set(
     m,
     a[ 0] * b[ 0] + a[ 1] * b[ 4] + a[ 2] * b[ 8] + a[ 3] * b[12],

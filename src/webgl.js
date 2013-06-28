@@ -272,7 +272,7 @@ gl_FragColor=texture2D(t,c);\
 
         view.width = width;
         view.height = height;
-        
+
         self.init_viewport();
         self.draw();
       },
@@ -283,10 +283,10 @@ gl_FragColor=texture2D(t,c);\
 
         mat4_rotate(proj, 0.0, 1.0, 0.0, latitude);
         mat4_rotate(temp, 1.0, 0.0, 0.0, longitude);
-        mat4_mul(proj, proj, temp);
+        mat4_mul(proj, temp, proj);
 
         mat4_perspective(temp, viewangle, 1.0, 0.1, 10.0);
-        mat4_mul(proj, proj, temp);
+        mat4_mul(proj, temp, proj);
 
         self.draw();
       }

@@ -50,8 +50,8 @@ HelikoPanoCube.engine(
 
             Matrix3D(faces[i - 1])
             .i()
-            .s(scale, -scale, scale) /* invert Y */
-            .m(geom[i - 1]);
+            .m(geom[i - 1])
+            .s(scale, -scale, scale); /* invert Y */
 
             plane.setAttribute('style', 'position:absolute;'
               /*+backfaceVisibility.css+':hidden;'*/
@@ -94,11 +94,11 @@ HelikoPanoCube.engine(
 
         mat4_scale(self.v, h_scale, -h_scale, h_scale); /* invert Y */
         mat4_translate(temp, -h_scale - 0.5 * (scale - width), -h_scale - 0.5 * (scale - height), -scale);
-        mat4_mul(self.v, self.v, temp);
+        mat4_mul(self.v, temp, self.v);
 
         view.style.width = width + 'px';
         view.style.height = height + 'px';
-
+        
         self.draw();
       },
       look: function(latitude, longitude, viewangle){
@@ -108,10 +108,10 @@ HelikoPanoCube.engine(
 
         mat4_rotate(proj, 0.0, 1.0, 0.0, latitude);
         mat4_rotate(temp, 1.0, 0.0, 0.0, longitude);
-        mat4_mul(proj, proj, temp);
+        mat4_mul(proj, temp, proj);
 
         mat4_perspective(temp, viewangle, 1.0, 0.1, 10.0);
-        mat4_mul(proj, proj, temp);
+        mat4_mul(proj, temp, proj);
 
         self.draw();
       }
