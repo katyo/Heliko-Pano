@@ -18,7 +18,7 @@ HelikoPanoCube.engine(
 
       view.setAttribute('style', 'position:relative;top:0;left:0;width:0;height:0;overflow:hidden;');
 
-      self.m = [ /* face's matrixes */
+      self.f = [ /* face's matrixes */
         mat4(),
         mat4(),
         mat4(),
@@ -40,7 +40,7 @@ HelikoPanoCube.engine(
             self = this,
             view = self.view,
             geom = self.geom,
-            mplane = self.m,
+            faces = self.f,
             scale;
 
         imagesLoad(urls, function(err, end, i, c, plane){
@@ -48,7 +48,7 @@ HelikoPanoCube.engine(
             /* increase by 0.001 to eliminate white glitches between faces */
             scale = 1.001 / max(plane.width, plane.height);
 
-            Matrix3D(mplane[i - 1])
+            Matrix3D(faces[i - 1])
             .i()
             .s(scale, -scale, scale) /* invert Y */
             .m(geom[i - 1]);
@@ -75,13 +75,13 @@ HelikoPanoCube.engine(
             proj = self.p,
             temp = self.r,
             pmat = self.l,
-            mplane = self.m,
+            faces = self.f,
             planes = self.view.children;
 
-        mat4_mul(temp, proj, view);
+        mat4_mul(temp, view, proj);
 
         for(i = 0; i < planes.length; i++){
-          mat4_mul(pmat, mplane[i], temp);
+          mat4_mul(pmat, temp, faces[i]);
           planes[i].style[transform.sty] = mat4_stringify_css(pmat);
         }
       },
